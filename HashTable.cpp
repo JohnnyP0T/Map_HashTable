@@ -1,5 +1,6 @@
 #include "HashTable.h"
 
+#define limitLoadFactor 0.8
 
 void InitializePointers(HashTable* hashTable)
 {
@@ -33,7 +34,9 @@ void AddElement(HashTable*& hashTable, std::string& key, std::string& value)
 	current->pointNext->key = key;
 	current->pointNext->value = value;
 
-	if (hashTable->length == (hashTable->capacity - 2))
+	const double loadFactor = (double)hashTable->length / (double)hashTable->capacity;
+	
+	if (loadFactor > limitLoadFactor)
 	{
 		Rehashing(hashTable);
 	}

@@ -103,7 +103,7 @@ int main()
 	{
 		if(valueForPrint)
 		{
-			std::cout << "/-----------------Hash_Table-----------------\\\n";
+			std::cout << " /-----------------Hash_Table-----------------\\\n";
 			PrintDataStruct(map->hashTable);
 			std::cout << "\n/-------------------Map-------------------\\\n";
 			PrintDataStruct(map);

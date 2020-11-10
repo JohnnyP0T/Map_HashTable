@@ -26,14 +26,20 @@ void AddElement(HashTable*& hashTable, std::string& key, std::string& value)
 	}
 
 	Node* current = hashTable->arrayPointers[index];
-	while(current->pointNext != nullptr)
+	while(current->pointNext != nullptr && current->key != key)
 	{
 		current = current->pointNext;
+	}
+	if (current->key == key)
+	{
+		current->value = value;
+		return;
 	}
 	current->pointNext = new Node;
 	current->pointNext->key = key;
 	current->pointNext->value = value;
-
+	++hashTable->length;
+	
 	const double loadFactor = (double)hashTable->length / (double)hashTable->capacity;
 	
 	if (loadFactor > LIMIT_LOAD_FACTOR)
@@ -66,6 +72,7 @@ void RemoveElement(HashTable* hashTable, std::string& key)
 		Node* nodeNext = current->pointNext;
 		delete current;
 		hashTable->arrayPointers[index] = nodeNext;
+		--hashTable->length;
 		return;
 	}
 	
@@ -78,11 +85,13 @@ void RemoveElement(HashTable* hashTable, std::string& key)
 		Node* nodeNext = current->pointNext->pointNext;
 		delete current->pointNext;
 		hashTable->arrayPointers[index]->pointNext = nodeNext;
+		--hashTable->length;
 		return;
 	}
 
 	delete current->pointNext;
 	hashTable->arrayPointers[index]->pointNext = nullptr;
+	--hashTable->length;
 }
 
 

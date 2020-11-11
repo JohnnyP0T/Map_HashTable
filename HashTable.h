@@ -11,9 +11,9 @@
 /// @brief Хеш-таблица
 struct HashTable
 {
-	int length = 0;
-	int capacity = 8;
-	Node** arrayPointers;
+	int Length = 0;
+	int Capacity = 8;
+	Node** ArrayPointers;
 };
 
 /// @brief Инициализация массива указателей
@@ -34,7 +34,7 @@ void RemoveElement(HashTable* hashTable, std::string& key);
 /// @brief Нахождение элмента по ключу в хеш таблице
 /// @param hashTable Указатель на хеш таблицу
 /// @param key Ключ
-/// @return Значение value
+/// @return Значение Value
 std::string FindElement(HashTable* hashTable, std::string& key);
 
 /// @brief Хеш функция

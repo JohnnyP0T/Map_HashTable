@@ -1,13 +1,16 @@
 #include "HashTable.h"
 
-#define LIMIT_LOAD_FACTOR 0.8
+//#define LIMIT_LOAD_FACTOR 0.8
+
+constexpr double LIMIT_LOAD_FACTOR = 0.8;
+
 
 void InitializePointers(HashTable* hashTable)
 {
-	hashTable->arrayPointers = new Node * [hashTable->capacity];
-	for(int i = 0; i < hashTable->capacity; i++)
+	hashTable->ArrayPointers = new Node * [hashTable->Capacity];
+	for(int i = 0; i < hashTable->Capacity; i++)
 	{
-		hashTable->arrayPointers[i] = nullptr;
+		hashTable->ArrayPointers[i] = nullptr;
 	}
 }
 
@@ -16,31 +19,31 @@ void AddElement(HashTable*& hashTable, std::string& key, std::string& value)
 {
 	const int index = HashFunction(hashTable, key);
 
-	if(hashTable->arrayPointers[index] == nullptr)
+	if(hashTable->ArrayPointers[index] == nullptr)
 	{
-		hashTable->arrayPointers[index] = new Node;
-		hashTable->arrayPointers[index]->key = key;
-		hashTable->arrayPointers[index]->value = value;
-		++hashTable->length;
+		hashTable->ArrayPointers[index] = new Node;
+		hashTable->ArrayPointers[index]->Key = key;
+		hashTable->ArrayPointers[index]->Value = value;
+		++hashTable->Length;
 		return;
 	}
 
-	Node* current = hashTable->arrayPointers[index];
-	while(current->pointNext != nullptr && current->key != key)
+	Node* current = hashTable->ArrayPointers[index];
+	while(current->PointNext != nullptr && current->Key != key)
 	{
-		current = current->pointNext;
+		current = current->PointNext;
 	}
-	if (current->key == key)
+	if (current->Key == key)
 	{
-		current->value = value;
+		current->Value = value;
 		return;
 	}
-	current->pointNext = new Node;
-	current->pointNext->key = key;
-	current->pointNext->value = value;
-	++hashTable->length;
+	current->PointNext = new Node;
+	current->PointNext->Key = key;
+	current->PointNext->Value = value;
+	++hashTable->Length;
 	
-	const double loadFactor = (double)hashTable->length / (double)hashTable->capacity;
+	const double loadFactor = (double)hashTable->Length / (double)hashTable->Capacity;
 	
 	if (loadFactor > LIMIT_LOAD_FACTOR)
 	{
@@ -52,68 +55,68 @@ void AddElement(HashTable*& hashTable, std::string& key, std::string& value)
 void RemoveElement(HashTable* hashTable, std::string& key)
 {
 	const int index = HashFunction(hashTable, key);
-	Node* current = hashTable->arrayPointers[index];
+	Node* current = hashTable->ArrayPointers[index];
 
 	if(current == nullptr)
 	{
 		throw std::exception("Does not exist\n");
 	}
 	
-	if(current->pointNext == nullptr)
+	if(current->PointNext == nullptr)
 	{
 		delete current;
-		hashTable->arrayPointers[index] = nullptr;
-		--hashTable->length;
+		hashTable->ArrayPointers[index] = nullptr;
+		--hashTable->Length;
 		return;
 	}
 
-	if(current->key == key)
+	if(current->Key == key)
 	{
-		Node* nodeNext = current->pointNext;
+		Node* nodeNext = current->PointNext;
 		delete current;
-		hashTable->arrayPointers[index] = nodeNext;
-		--hashTable->length;
+		hashTable->ArrayPointers[index] = nodeNext;
+		--hashTable->Length;
 		return;
 	}
 	
-	while(current->pointNext->key != key)
+	while(current->PointNext->Key != key)
 	{
-		current = current->pointNext;
+		current = current->PointNext;
 	}
-	if (current->pointNext->pointNext != nullptr)
+	if (current->PointNext->PointNext != nullptr)
 	{
-		Node* nodeNext = current->pointNext->pointNext;
-		delete current->pointNext;
-		hashTable->arrayPointers[index]->pointNext = nodeNext;
-		--hashTable->length;
+		Node* nodeNext = current->PointNext->PointNext;
+		delete current->PointNext;
+		hashTable->ArrayPointers[index]->PointNext = nodeNext;
+		--hashTable->Length;
 		return;
 	}
 
-	delete current->pointNext;
-	hashTable->arrayPointers[index]->pointNext = nullptr;
-	--hashTable->length;
+	delete current->PointNext;
+	hashTable->ArrayPointers[index]->PointNext = nullptr;
+	--hashTable->Length;
 }
 
 
 std::string FindElement(HashTable* hashTable, std::string& key)
 {
-	Node* current = hashTable->arrayPointers[HashFunction(hashTable, key)];
+	Node* current = hashTable->ArrayPointers[HashFunction(hashTable, key)];
 	
 	if(current == nullptr)
 	{
 		throw std::exception("Does not exist\n");
 	}
 	
-	if(current->pointNext == nullptr)
+	if(current->PointNext == nullptr)
 	{
-		return current->value;
+		return current->Value;
 	}
 	
-	while(current->key != key)
+	while(current->Key != key)
 	{
-		current = current->pointNext;
+		current = current->PointNext;
 	}
-	return current->value;
+	return current->Value;
 }
 
 
@@ -121,7 +124,7 @@ int HashFunction(HashTable* hashTable, std::string& key)
 {
 	int hash = 0;
 	//Два соседних натуральных числа всегда будут взаимно просты
-	const int a = hashTable->capacity - 2;
+	const int a = hashTable->Capacity - 2;	/// @todo a
 	int power = 1;
 	
 	for (char i : key)
@@ -130,7 +133,7 @@ int HashFunction(HashTable* hashTable, std::string& key)
 		power *= a;
 	}
 	
-	return abs(hash % (hashTable->capacity - 1));
+	return abs(hash % (hashTable->Capacity - 1));
 }
 
 
@@ -138,25 +141,25 @@ void Rehashing(HashTable*& hashTable)
 {
 	const int growthFactor = 2;
 	HashTable* newHashTable = new HashTable;
-	newHashTable->capacity = hashTable->capacity * growthFactor;
+	newHashTable->Capacity = hashTable->Capacity * growthFactor;
 	InitializePointers(newHashTable);
 
 	Node* current;
 	
-	for(int i = 0; i < hashTable->capacity; i++)
+	for(int i = 0; i < hashTable->Capacity; i++)
 	{
-		current = hashTable->arrayPointers[i];
+		current = hashTable->ArrayPointers[i];
 		if(current != nullptr)
 		{
 			while(current != nullptr)
 			{
-				AddElement(newHashTable, current->key, current->value);
-				current = current->pointNext;
+				AddElement(newHashTable, current->Key, current->Value);
+				current = current->PointNext;
 			}
 		}
 	}
 
-	delete[] hashTable->arrayPointers;
+	delete[] hashTable->ArrayPointers;
 	delete hashTable;
 	hashTable = newHashTable;
 }
@@ -164,5 +167,5 @@ void Rehashing(HashTable*& hashTable)
 
 void RemoveHashTable(HashTable* hashTable)
 {
-	delete[] hashTable->arrayPointers;
+	delete[] hashTable->ArrayPointers;
 }

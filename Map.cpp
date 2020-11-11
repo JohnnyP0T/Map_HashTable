@@ -3,24 +3,24 @@
 
 void InsertItem(Map* map, std::string& key, std::string& value)
 {
-	AddElement(map->hashTable, key, value);
+	AddElement(map->HashTableObject, key, value);
 }
 
 
 void RemoveItem(Map* map, std::string& key)
 {
-	RemoveElement(map->hashTable, key);
+	RemoveElement(map->HashTableObject, key);
 }
 
 
 std::string FindItem(Map* map, std::string& key)
 {
-	return FindElement(map->hashTable, key);
+	return FindElement(map->HashTableObject, key);
 }
 
 
 void DeleteMap(Map* map)
 {
-	RemoveHashTable(map->hashTable);
-	delete map->hashTable;
+	RemoveHashTable(map->HashTableObject);
+	delete map->HashTableObject;
 }

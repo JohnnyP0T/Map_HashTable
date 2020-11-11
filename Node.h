@@ -1,17 +1,16 @@
 #pragma once
 
-#ifndef _LIST_H_
-#define _LIST_H_
+#ifndef _NODE_H_	
+#define _NODE_H_
 
 #include <string>
-
-/// @brief Узел списка
+/// @brief Узел
 struct Node
 {
-	Node* pointNext = nullptr;
-	std::string value = "";
-	std::string key = "";
+	Node* PointNext = nullptr;
+	std::string Value = "";
+	std::string Key = "";
 };
 
 
-#endif //_LIST_H_
+#endif // _NODE_H_	

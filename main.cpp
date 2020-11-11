@@ -2,109 +2,43 @@
 
 #include "Map.h"
 
+/// @brief Печать хеш таблицы
+void PrintDataStruct(HashTable* hash);
 
-void PrintDataStruct(HashTable* hash)
+/// @brief Печать словаря
+void PrintDataStruct(Map* map);
+
+/// @brief Получение элемента с консоли
+/// @return Значение пользователя
+int GetElementConsole();
+
+
+/// @brief Меню
+enum class Menu
 {
-	Node* current;
-	for(int i = 0; i < hash->capacity; i++)
-	{
-		current = hash->arrayPointers[i];
-		if(current == nullptr)
-		{
-			std::cout << "NULL\n";
-		}
-		else if(current->pointNext == nullptr)
-		{
-			std::cout << "key: " << current->key << "\t value: " << current->value << std::endl;
-		}
-		else
-		{
-			while(current != nullptr)
-			{
-				std::cout << "key: " << current->key << "\t value: " << current->value << " -> ";
-				current = current->pointNext;
-			}
-			std::cout << std::endl;
-		}
-	}
-}
-
-
-void PrintDataStruct(Map* map)
-{
-	Node* current;
-	for (int i = 0; i < map->hashTable->capacity; i++)
-	{
-		current = map->hashTable->arrayPointers[i];
-		if (current == nullptr)
-		{
-			std::cout << "";
-		}
-		else
-		{
-			while (current != nullptr)
-			{
-				std::cout << "key: " << current->key << "\t value: " << current->value;
-				current = current->pointNext;
-				std::cout << std::endl;
-			}
-		}
-	}
-}
-
-
-int GetElementConsole()
-{
-	while (true)
-	{
-		std::string inputValue;
-		size_t length;
-		std::cout << "Enter menu value: ";
-		std::getline(std::cin, inputValue);
-
-		try
-		{
-			const int number = stoi(inputValue, &length);
-
-			if (length == inputValue.length())
-			{
-				return number;
-			}
-		}
-		catch (std::exception&)
-		{
-			std::cout << "Error exception\n";
-		}
-
-		std::cout << inputValue << " is not a number" << std::endl;
-	}
-}
+	Add = 1,
+	Remove = 2,
+	Find = 3,
+	Show = 4,
+	Exit = 5
+};
 
 
 int main()
 {
-	enum MyChoice
-	{
-		Add = 1,
-		Remove = 2,
-		Find = 3,
-		Show = 4,
-		Exit = 5
-	};
-	
 	Map* map = new Map;
-	InitializePointers(map->hashTable);
+	InitializePointers(map->HashTableObject);
 	
 	std::string key;
 	std::string value;
-	bool valueForPrint = false;
+	bool isValueForPrint = false;		
 	
 	for(;;)
 	{
-		if(valueForPrint)
+		if(isValueForPrint)
 		{
 			std::cout << " /-----------------Hash_Table-----------------\\\n";
-			PrintDataStruct(map->hashTable);
+			PrintDataStruct(map->HashTableObject);
 			std::cout << "\n/-------------------Map-------------------\\\n";
 			PrintDataStruct(map);
 		}
@@ -117,21 +51,21 @@ int main()
 			<< "5 - Exit\n";
 		const int valueForMenu = GetElementConsole();
 		
-		switch (valueForMenu)
+		switch (static_cast< Menu >( valueForMenu ))
 		{
-			case Add:
+			case Menu::Add:
 			{
-				std::cout << "key: ";
+				std::cout << "Key: ";
 				std::getline(std::cin, key);
-				std::cout << "value: ";
+				std::cout << "Value: ";
 				std::getline(std::cin, value);
 				InsertItem(map, key, value);
 				break;
 			}
 			
-			case Remove:
+			case Menu::Remove:
 			{
-				std::cout << "key: ";
+				std::cout << "Key: ";
 				std::getline(std::cin, key);
 				try
 				{
@@ -146,13 +80,13 @@ int main()
 				break;
 			}
 			
-			case Find:
+			case Menu::Find:
 			{
-				std::cout << "key: ";
+				std::cout << "Key: ";
 				std::getline(std::cin, key);
 				try
 				{
-					std::cout << "value: " << FindItem(map, key) << std::endl;
+					std::cout << "Value: " << FindItem(map, key) << std::endl;
 				}
 				catch (std::exception& exceptionFind)
 				{
@@ -164,13 +98,13 @@ int main()
 				break;
 			}
 			
-			case Show:
+			case Menu::Show:
 			{
-				valueForPrint = true;
+				isValueForPrint = true;
 				break;
 			}
 			
-			case Exit:
+			case Menu::Exit:
 			{
 				DeleteMap(map);
 				delete map;
@@ -179,11 +113,83 @@ int main()
 			
 			default:
 			{
-				std::cout << "Invalid value\n";
+				std::cout << "Invalid Value\n";
 				system("pause");
 				break;
 			}
 		}
 		system("cls");
+	}
+}
+
+
+void PrintDataStruct(HashTable* hash)
+{
+	Node* current;
+	for(int i = 0; i < hash->Capacity; i++)
+	{
+		current = hash->ArrayPointers[i];
+		if(current == nullptr)
+		{
+			std::cout << "NULL\n";
+			return;
+		}
+		if(current->PointNext == nullptr)
+		{
+			std::cout << "Key: " << current->Key << "\t Value: " << current->Value << std::endl;
+			return;
+		}
+		while(current != nullptr)
+		{
+			std::cout << "Key: " << current->Key << "\t Value: " << current->Value << " -> ";
+			current = current->PointNext;
+		}
+		std::cout << std::endl;
+	}
+}
+
+
+void PrintDataStruct(Map* map)
+{
+	Node* current;
+	for (int i = 0; i < map->HashTableObject->Capacity; i++)
+	{
+		current = map->HashTableObject->ArrayPointers[i];
+		if (current == nullptr)
+		{
+			std::cout << "";
+			return;
+		}
+		while (current != nullptr)
+		{
+			std::cout << "Key: " << current->Key << "\t Value: " << current->Value;
+			current = current->PointNext;
+			std::cout << std::endl;
+		}
+	}
+}
+
+
+int GetElementConsole()
+{
+	while (true)
+	{
+		std::string inputValue;
+		size_t length;
+		std::cout << "Enter menu Value: ";
+		std::getline(std::cin, inputValue);
+
+		try
+		{
+			int number = stoi(inputValue, &length);
+			if (length == inputValue.length())
+			{
+				return number;
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::cout << inputValue << " is not a number! " << e.what() << std::endl;
+		}
 	}
 }

@@ -8,7 +8,7 @@
 /// @brief Словарь на базе хеш таблицы
 struct Map
 {
-	HashTable* hashTable = new HashTable;
+	HashTable* HashTableObject = new HashTable;
 };
 
 /// @brief Добавление элемента в словарь
@@ -25,7 +25,7 @@ void RemoveItem(Map* map, std::string& key);
 /// @brief Поиск элемента по ключу в словаре
 /// @param map Указатель на словарь
 /// @param key Ключ
-/// @return Значение value
+/// @return Значение Value
 std::string FindItem(Map* map, std::string& key);
 
 /// @brief Удаление словаря

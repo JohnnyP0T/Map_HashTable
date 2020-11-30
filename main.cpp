@@ -2,18 +2,18 @@
 
 #include "Map.h"
 
-/// @brief Печать хеш таблицы
+/// @brief РџРµС‡Р°С‚СЊ С…РµС€ С‚Р°Р±Р»РёС†С‹
 void PrintDataStruct(HashTable* hash);
 
-/// @brief Печать словаря
+/// @brief РџРµС‡Р°С‚СЊ СЃР»РѕРІР°СЂСЏ
 void PrintDataStruct(Map* map);
 
-/// @brief Получение элемента с консоли
-/// @return Значение пользователя
+/// @brief РџРѕР»СѓС‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° СЃ РєРѕРЅСЃРѕР»Рё
+/// @return Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 int GetElementConsole();
 
 
-/// @brief Меню
+/// @brief РњРµРЅСЋ
 enum class Menu
 {
 	Add = 1,
@@ -132,12 +132,12 @@ void PrintDataStruct(HashTable* hash)
 		if(current == nullptr)
 		{
 			std::cout << "NULL\n";
-			return;
+			continue;
 		}
 		if(current->PointNext == nullptr)
 		{
 			std::cout << "Key: " << current->Key << "\t Value: " << current->Value << std::endl;
-			return;
+			continue;
 		}
 		while(current != nullptr)
 		{
@@ -158,7 +158,7 @@ void PrintDataStruct(Map* map)
 		if (current == nullptr)
 		{
 			std::cout << "";
-			return;
+			continue;
 		}
 		while (current != nullptr)
 		{

@@ -29,15 +29,15 @@ void AddElement(HashTable*& hashTable, std::string& key, std::string& value)
 	}
 
 	Node* current = hashTable->ArrayPointers[index];
-	while(current->PointNext != nullptr && current->Key != key)
+	while(current->PointNext != nullptr /*&& current->Key != key*/)
 	{
 		current = current->PointNext;
 	}
-	if (current->Key == key)
-	{
-		current->Value = value;
-		return;
-	}
+	//if (current->Key == key)
+	//{
+		//current->Value = value;
+		//return;
+	//}
 	current->PointNext = new Node;
 	current->PointNext->Key = key;
 	current->PointNext->Value = value;
